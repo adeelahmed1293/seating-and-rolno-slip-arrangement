@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs   = require('fs');
+const os   = require('os');
 
 let win;
 
@@ -51,30 +52,135 @@ ipcMain.handle('dialog:saveCSV', async (_e, { content, defaultName }) => {
   return true;
 });
 
-// ─── IPC: read local HTML partial (modular page loading) ──────────
+// ─── IPC: save PDF ────────────────────────────────────────────────
+ipcMain.handle('dialog:savePDF', async (_e, { html, css, defaultName }) => {
+  // 1. Show save dialog first
+  const { canceled, filePath } = await dialog.showSaveDialog(win, {
+    title: 'Save Attendance PDF',
+    defaultPath: defaultName || 'attendance.pdf',
+    filters: [{ name: 'PDF File', extensions: ['pdf'] }],
+  });
+  if (canceled || !filePath) return { ok: false, err: 'cancelled' };
+
+  // 2. Write full HTML to temp file
+  const tmpFile = path.join(os.tmpdir(), `ems_att_${Date.now()}.html`);
+  const fullHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>${css}</style>
+</head>
+<body>${html}</body>
+</html>`;
+  fs.writeFileSync(tmpFile, fullHTML, 'utf8');
+
+  // 3. Create hidden window, load temp file, generate PDF
+  const pdfWin = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      offscreen: false,
+    },
+  });
+
+  try {
+    await pdfWin.loadFile(tmpFile);
+
+    // Small delay to ensure full render
+    await new Promise(r => setTimeout(r, 500));
+
+    const pdfData = await pdfWin.webContents.printToPDF({
+      printBackground: true,
+      pageSize: 'A4',
+      landscape: false,
+      margins: {
+        marginType: 'custom',
+        top:    0.4,
+        bottom: 0.4,
+        left:   0.4,
+        right:  0.4,
+      },
+    });
+
+    fs.writeFileSync(filePath, pdfData);
+    return { ok: true };
+
+  } catch (err) {
+    console.error('PDF generation error:', err);
+    return { ok: false, err: err.message };
+  } finally {
+    pdfWin.destroy();
+    try { fs.unlinkSync(tmpFile); } catch {}
+  }
+});
+
+// ─── IPC: print ──────────────────────────────────────────────────
+ipcMain.handle('dialog:printHTML', async (_e, { html, css }) => {
+  const tmpFile = path.join(os.tmpdir(), `ems_print_${Date.now()}.html`);
+  const fullHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>${css}</style>
+</head>
+<body>${html}</body>
+</html>`;
+  fs.writeFileSync(tmpFile, fullHTML, 'utf8');
+
+  const printWin = new BrowserWindow({
+    show: false,
+    webPreferences: { contextIsolation: true, nodeIntegration: false },
+  });
+
+  try {
+    await printWin.loadFile(tmpFile);
+    await new Promise(r => setTimeout(r, 300));
+    await new Promise((resolve, reject) => {
+      printWin.webContents.print(
+        {
+          silent: false,
+          printBackground: true,
+          margins: { marginType: 'custom', top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 },
+        },
+        (success, errType) => {
+          if (errType && errType !== 'cancelled') reject(new Error(errType));
+          else resolve();
+        }
+      );
+    });
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, err: err.message };
+  } finally {
+    printWin.destroy();
+    try { fs.unlinkSync(tmpFile); } catch {}
+  }
+});
+
+// ─── IPC: read partial HTML ──────────────────────────────────────
 ipcMain.handle('fs:readPartial', async (_e, relPath) => {
-  // Security: only allow reads from within src/
-  const safe = path.normalize(relPath).replace(/^(\.\.(\/|\\|$))+/, '');
+  const safe = path.normalize(relPath).replace(/^(\.\.([\/\\]|$))+/, '');
   const full  = path.join(__dirname, 'src', safe);
   if (!full.startsWith(path.join(__dirname, 'src'))) throw new Error('Access denied');
   return fs.readFileSync(full, 'utf8');
 });
 
-// ─── Application menu ─────────────────────────────────────────────
+// ─── Application menu ────────────────────────────────────────────
 function buildMenu() {
   const tpl = [
     ...(process.platform === 'darwin' ? [{ label: app.name, submenu:[{role:'about'},{type:'separator'},{role:'quit'}] }] : []),
     { label: 'File', submenu: [
-      { label:'Import CSV / Excel…',  accelerator:'CmdOrCtrl+O',       click: () => win.webContents.send('menu:openFile') },
+      { label:'Import CSV / Excel…',  accelerator:'CmdOrCtrl+O', click: () => win.webContents.send('menu:openFile') },
       { type:'separator' },
-      { label:'Export All Rooms CSV', accelerator:'CmdOrCtrl+E',       click: () => win.webContents.send('menu:exportAll') },
+      { label:'Export All Rooms CSV', accelerator:'CmdOrCtrl+E', click: () => win.webContents.send('menu:exportAll') },
       { label:'Export Summary CSV',   accelerator:'CmdOrCtrl+Shift+E', click: () => win.webContents.send('menu:exportSummary') },
       { type:'separator' },
       process.platform === 'darwin' ? { role:'close' } : { role:'quit' },
     ]},
     { label:'Edit',   submenu:[{role:'undo'},{role:'redo'},{type:'separator'},{role:'cut'},{role:'copy'},{role:'paste'}] },
     { label:'View',   submenu:[{role:'reload'},{role:'forceReload'},{type:'separator'},{role:'resetZoom'},{role:'zoomIn'},{role:'zoomOut'},{type:'separator'},{role:'togglefullscreen'}] },
-    { label:'Help',   submenu:[{ label:'About', click: () => dialog.showMessageBox(win, { type:'info', title:'Exam Management System', message:'Exam Management System v1.0.0', detail:'Anti-cheat seating planner\nRoll slip generator\nBuilt with Electron' }) }] },
+    { label:'Help',   submenu:[{ label:'About', click: () => dialog.showMessageBox(win, { type:'info', title:'Exam Management System', message:'Exam Management System v1.0.0' }) }] },
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(tpl));
 }

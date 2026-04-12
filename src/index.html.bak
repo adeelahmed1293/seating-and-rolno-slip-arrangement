@@ -40,10 +40,6 @@
     <div class="ni" id="nav-directory" onclick="nav('directory')">
       <div class="nd" style="background:#E91E8C"></div><span class="nl">Roll Directory</span>
     </div>
-    <div class="nav-sl">Attendance</div>
-    <div class="ni" id="nav-attendance" onclick="nav('attendance')">
-      <div class="nd" style="background:#F39C12"></div><span class="nl">Attendance Sheets</span>
-    </div>
     <div class="nav-sl">Roll Slips</div>
     <div class="ni" id="nav-datesheet" onclick="nav('datesheet')">
       <div class="nd" style="background:#00A896"></div><span class="nl">Upload Date Sheet</span>

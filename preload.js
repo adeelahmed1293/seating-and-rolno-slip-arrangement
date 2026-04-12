@@ -1,13 +1,13 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  // Native file open dialog → { name, ext, data:base64 } | null
-  openFile:    ()                          => ipcRenderer.invoke('dialog:openFile'),
-  // Native save dialog for CSV
-  saveCSV:     (content, defaultName)      => ipcRenderer.invoke('dialog:saveCSV', { content, defaultName }),
-  // Read a local src/ partial file (for modular page loading)
-  readPartial: (relPath)                   => ipcRenderer.invoke('fs:readPartial', relPath),
-  // Menu bar shortcuts
+  openFile:    ()                           => ipcRenderer.invoke('dialog:openFile'),
+  saveCSV:     (content, defaultName)       => ipcRenderer.invoke('dialog:saveCSV', { content, defaultName }),
+  // savePDF returns { ok: bool, err?: string }
+  savePDF:     (html, css, defaultName)     => ipcRenderer.invoke('dialog:savePDF', { html, css, defaultName }),
+  // printHTML returns { ok: bool, err?: string }
+  printHTML:   (html, css)                  => ipcRenderer.invoke('dialog:printHTML', { html, css }),
+  readPartial: (relPath)                    => ipcRenderer.invoke('fs:readPartial', relPath),
   onMenuOpenFile:      cb => ipcRenderer.on('menu:openFile',      cb),
   onMenuExportAll:     cb => ipcRenderer.on('menu:exportAll',     cb),
   onMenuExportSummary: cb => ipcRenderer.on('menu:exportSummary', cb),

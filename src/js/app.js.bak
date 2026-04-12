@@ -7,7 +7,6 @@ import { showToast } from './utils.js';
 const NAV_COLORS = {
   dash:'ap', import:'apk', classes:'apk', rooms:'apk',
   generate:'apk', roomview:'apk', directory:'apk',
-  attendance:'ao',
   datesheet:'at', slips:'at'
 };
 
@@ -22,7 +21,6 @@ const PAGE_MODULES = {
   generate:  () => import('../pages/generate.js'),
   roomview:  () => import('../pages/roomview.js'),
   directory: () => import('../pages/directory.js'),
-  attendance: () => import('../pages/attendance.js'),
   datesheet: () => import('../pages/datesheet.js'),
   slips:     () => import('../pages/slips.js'),
 };
