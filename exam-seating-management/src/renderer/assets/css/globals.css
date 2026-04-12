@@ -1,0 +1,146 @@
+/* ============================================================
+   globals.css  —  Shared design tokens & resets
+   Exam Seating Management System — BATs Dev
+   Theme: Navy Blue / Steel Blue (matches brand image)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand Navy Palette */
+  --clr-navy-darkest:  #0e1929;
+  --clr-navy-dark:     #132030;
+  --clr-navy-mid:      #19293d;
+  --clr-navy-light:    #1e3350;
+  --clr-navy-border:   #274468;
+
+  /* Steel blue accents */
+  --clr-steel:         #4a7fb5;
+  --clr-steel-light:   #6b9fd4;
+  --clr-steel-pale:    #8fb8e0;
+  --clr-steel-glow:    rgba(74,127,181,0.35);
+  --clr-steel-soft:    rgba(74,127,181,0.12);
+
+  /* Mapped tokens */
+  --clr-bg:          var(--clr-navy-darkest);
+  --clr-surface:     var(--clr-navy-dark);
+  --clr-surface-2:   var(--clr-navy-mid);
+  --clr-border:      rgba(255,255,255,0.07);
+  --clr-border-glow: rgba(74,127,181,0.38);
+  --clr-accent:      var(--clr-steel);
+  --clr-accent-2:    var(--clr-steel-light);
+  --clr-accent-soft: var(--clr-steel-soft);
+
+  /* Text */
+  --clr-text:        #d8e8f5;
+  --clr-text-muted:  #6d90b5;
+  --clr-text-dim:    #354f6a;
+
+  /* Status */
+  --clr-success: #34d399;
+  --clr-error:   #f87171;
+  --clr-warning: #fbbf24;
+
+  /* Typography */
+  --font-display: 'Syne', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 36px;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+
+  /* Shadows */
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.55);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.65);
+  --glow-accent: 0 0 28px rgba(74,127,181,0.2);
+
+  /* Transitions */
+  --t-fast:   140ms cubic-bezier(0.4,0,0.2,1);
+  --t-normal: 220ms cubic-bezier(0.4,0,0.2,1);
+  --t-slow:   380ms cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--clr-surface); }
+::-webkit-scrollbar-thumb { background: var(--clr-navy-border); border-radius: 3px; }
+
+.titlebar {
+  -webkit-app-region: drag;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 34px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(14,25,41,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.titlebar__app-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--clr-text-muted);
+  text-transform: uppercase;
+}
+
+.titlebar__controls { -webkit-app-region: no-drag; display: flex; gap: 7px; }
+
+.titlebar__btn {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: filter var(--t-fast), transform var(--t-fast);
+  outline: none;
+}
+.titlebar__btn:hover { filter: brightness(1.35); transform: scale(1.18); }
+.titlebar__btn--close { background: #ff5f57; }
+.titlebar__btn--min   { background: #ffbd2e; }
+.titlebar__btn--max   { background: #28c840; }
+
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes fadeUp    { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeLeft  { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
+@keyframes fadeRight { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+@keyframes spin      { to{transform:rotate(360deg)} }
+@keyframes float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes pulse-ring{ 0%,100%{box-shadow:0 0 0 0 rgba(74,127,181,0)} 50%{box-shadow:0 0 0 6px rgba(74,127,181,0.15)} }
+@keyframes gridScroll{ from{background-position:0 0} to{background-position:40px 40px} }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-7px)}
+  40%{transform:translateX(7px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}

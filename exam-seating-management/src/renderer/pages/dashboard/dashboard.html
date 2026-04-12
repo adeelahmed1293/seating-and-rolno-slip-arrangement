@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"/>
+  <title>Dashboard — Exam Seating Management System</title>
+  <link rel="stylesheet" href="../../assets/css/globals.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+
+  <div class="titlebar">
+    <span class="titlebar__app-name">ESMS &mdash; Dashboard</span>
+    <div class="titlebar__controls">
+      <button class="titlebar__btn titlebar__btn--min"   id="btn-min"   aria-label="Minimize"></button>
+      <button class="titlebar__btn titlebar__btn--max"   id="btn-max"   aria-label="Maximize"></button>
+      <button class="titlebar__btn titlebar__btn--close" id="btn-close" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div class="dashboard-layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <div class="sidebar__icon">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect x="2"  y="2"  width="12" height="12" rx="3" fill="currentColor" opacity=".9"/>
+            <rect x="18" y="2"  width="12" height="12" rx="3" fill="currentColor" opacity=".5"/>
+            <rect x="2"  y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".5"/>
+            <rect x="18" y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".25"/>
+          </svg>
+        </div>
+        <span class="sidebar__app-name">ESMS</span>
+      </div>
+
+      <nav class="sidebar__nav" role="navigation" aria-label="Main navigation">
+        <a class="nav-item nav-item--active" href="#" data-page="dashboard">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <!-- ═══ ADD YOUR MENU ITEMS BELOW ═══ -->
+        <a class="nav-item" href="#" data-page="exams">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+            <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+          </svg>
+          <span>Exams</span>
+        </a>
+        <a class="nav-item" href="#" data-page="students">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zm5 2a2 2 0 11-4 0 2 2 0 014 0zM2 8a2 2 0 114 0 2 2 0 01-4 0zm-.5 8a1 1 0 01-1-1 6 6 0 0112 0 1 1 0 01-1 1h-10z"/>
+          </svg>
+          <span>Students</span>
+        </a>
+        <a class="nav-item" href="#" data-page="halls">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1a1 1 0 000 2h2a1 1 0 100-2H7zm0 4a1 1 0 000 2h2a1 1 0 100-2H7zm6-4a1 1 0 11-2 0 1 1 0 012 0zm-1 4a1 1 0 100 2h.01a1 1 0 100-2H12z" clip-rule="evenodd"/>
+          </svg>
+          <span>Exam Halls</span>
+        </a>
+        <a class="nav-item" href="#" data-page="seating">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zm6-8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2h-2zm0 8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2h-2z"/>
+          </svg>
+          <span>Seating Plans</span>
+        </a>
+        <a class="nav-item" href="#" data-page="reports">
+          <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Reports</span>
+        </a>
+        <!-- ═══ END MENU ITEMS ═══ -->
+      </nav>
+
+      <div class="sidebar__footer">
+        <button class="logout-btn" id="logoutBtn">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+          </svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Page Header -->
+      <header class="page-header">
+        <div>
+          <h1 class="page-header__title">Dashboard</h1>
+          <p  class="page-header__subtitle">Welcome back, Admin. Here's your overview.</p>
+        </div>
+        <div class="page-header__date" id="currentDate"></div>
+      </header>
+
+      <!-- Stat Cards -->
+      <!-- ═══ ADD / EDIT STAT CARDS HERE ═══ -->
+      <section class="stats-grid" aria-label="Overview statistics">
+        <div class="stat-card stat-card--accent" style="--d:.05s">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Total Exams</span>
+            <span class="stat-card__value">0</span>
+          </div>
+          <div class="stat-card__trend stat-card__trend--neutral">—</div>
+        </div>
+
+        <div class="stat-card" style="--d:.1s">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zm5 2a2 2 0 11-4 0 2 2 0 014 0zM2 8a2 2 0 114 0 2 2 0 01-4 0zm-.5 8a1 1 0 01-1-1 6 6 0 0112 0 1 1 0 01-1 1h-10z"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Enrolled Students</span>
+            <span class="stat-card__value">0</span>
+          </div>
+          <div class="stat-card__trend stat-card__trend--neutral">—</div>
+        </div>
+
+        <div class="stat-card" style="--d:.15s">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Exam Halls</span>
+            <span class="stat-card__value">0</span>
+          </div>
+          <div class="stat-card__trend stat-card__trend--neutral">—</div>
+        </div>
+
+        <div class="stat-card" style="--d:.2s">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zm6 8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2h-2z"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Seating Plans</span>
+            <span class="stat-card__value">0</span>
+          </div>
+          <div class="stat-card__trend stat-card__trend--neutral">—</div>
+        </div>
+      </section>
+      <!-- ═══ END STAT CARDS ═══ -->
+
+      <!-- Content placeholder -->
+      <section class="dashboard-placeholder" style="--d:.25s">
+        <div class="placeholder-icon">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="8"  y="8"  width="20" height="20" rx="4" fill="currentColor" opacity=".5"/>
+            <rect x="36" y="8"  width="20" height="20" rx="4" fill="currentColor" opacity=".3"/>
+            <rect x="8"  y="36" width="20" height="20" rx="4" fill="currentColor" opacity=".3"/>
+            <rect x="36" y="36" width="20" height="20" rx="4" fill="currentColor" opacity=".15"/>
+          </svg>
+        </div>
+        <h3>Dashboard content goes here</h3>
+        <p>Add charts, tables, recent activity, and more in <code>dashboard.html</code></p>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

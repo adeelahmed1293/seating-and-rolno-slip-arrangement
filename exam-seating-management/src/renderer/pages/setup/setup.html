@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;"/>
+  <title>First-Time Setup — ESMS</title>
+  <link rel="stylesheet" href="../../assets/css/globals.css"/>
+  <link rel="stylesheet" href="setup.css"/>
+</head>
+<body>
+
+  <div class="titlebar">
+    <span class="titlebar__app-name">ESMS &mdash; First-Time Setup</span>
+    <div class="titlebar__controls">
+      <button class="titlebar__btn titlebar__btn--min"   id="btn-min"   title="Minimize"  aria-label="Minimize"></button>
+      <button class="titlebar__btn titlebar__btn--max"   id="btn-max"   title="Maximize"  aria-label="Maximize"></button>
+      <button class="titlebar__btn titlebar__btn--close" id="btn-close" title="Close"     aria-label="Close"></button>
+    </div>
+  </div>
+
+  <main class="setup-layout">
+
+    <!-- ══ LEFT: Brand Image Panel ══ -->
+    <section class="panel panel--left" aria-hidden="true">
+      <div class="grid-overlay"></div>
+      <div class="corner corner--tl"></div>
+      <div class="corner corner--br"></div>
+
+      <div class="left-inner">
+        <div class="logo-wrap">
+          <img
+            src="../../assets/images/logo.png"
+            alt="Exam Seating Management System Logo"
+            class="brand-img"
+            draggable="false"
+          />
+        </div>
+
+        <div class="bats-badge">
+          <svg class="bat-icon" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 8C40 8 32 2 20 4C12 6 6 12 4 16C8 14 14 15 18 18C14 16 10 18 8 22C12 20 18 20 22 24C18 22 16 26 18 30C22 26 28 24 32 26C34 24 36 20 36 16C38 18 40 22 40 22C40 22 42 18 44 16C44 20 46 24 48 26C52 24 58 26 62 30C64 26 62 22 58 24C62 20 68 20 72 22C70 18 66 16 62 18C66 15 72 14 76 16C74 12 68 6 60 4C48 2 40 8 40 8Z" fill="currentColor" opacity="0.6"/>
+          </svg>
+          <span>Developed by the <strong>BATs Dev</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ RIGHT: Setup Form ══ -->
+    <section class="panel panel--right">
+      <div class="form-card">
+
+        <!-- Mini brand header -->
+        <div class="form-brand">
+          <div class="form-brand__dot"></div>
+          <span class="form-brand__label">One-Time Setup</span>
+        </div>
+
+        <!-- Step indicator -->
+        <div class="steps" aria-label="Setup steps">
+          <div class="step step--active" id="step-indicator-1">
+            <span class="step__num">1</span>
+            <span class="step__label">Set Password</span>
+          </div>
+          <div class="step__connector"></div>
+          <div class="step" id="step-indicator-2">
+            <span class="step__num">2</span>
+            <span class="step__label">Confirm</span>
+          </div>
+          <div class="step__connector"></div>
+          <div class="step" id="step-indicator-3">
+            <span class="step__num">3</span>
+            <span class="step__label">Done</span>
+          </div>
+        </div>
+
+        <h2 class="form-title">Create Admin Password</h2>
+        <p class="form-subtitle">
+          Stored securely via bcrypt. Username is fixed as <code>admin</code>.
+        </p>
+
+        <!-- Alert -->
+        <div class="alert" id="alert" hidden role="alert" aria-live="polite">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-9v4a1 1 0 11-2 0V9a1 1 0 112 0zm0-4a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/>
+          </svg>
+          <span id="alert-msg"></span>
+        </div>
+
+        <form class="login-form" id="setupForm" novalidate autocomplete="off">
+
+          <!-- New Password -->
+          <div class="field-group" id="fg-new-password">
+            <label class="field-label" for="newPassword">New Password</label>
+            <div class="field-wrap">
+              <span class="field-icon field-icon--pre">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+              </span>
+              <input class="field-input" type="password" id="newPassword" placeholder="Minimum 8 characters" aria-required="true" aria-describedby="new-err"/>
+              <button class="field-icon field-icon--suf toggle-btn" type="button" id="toggle1" aria-label="Toggle password">
+                <svg class="eye-show" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+                <svg class="eye-hide" viewBox="0 0 20 20" fill="currentColor" style="display:none"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/></svg>
+              </button>
+            </div>
+            <!-- Strength bar -->
+            <div class="strength-bar" id="strengthBar" aria-hidden="true">
+              <div class="strength-bar__track">
+                <div class="strength-bar__fill" id="strengthFill"></div>
+              </div>
+              <span class="strength-bar__label" id="strengthLabel">—</span>
+            </div>
+            <span class="field-error" id="new-err" aria-live="polite"></span>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="field-group" id="fg-confirm-password">
+            <label class="field-label" for="confirmPassword">Confirm Password</label>
+            <div class="field-wrap">
+              <span class="field-icon field-icon--pre">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              </span>
+              <input class="field-input" type="password" id="confirmPassword" placeholder="Re-enter your password" aria-required="true" aria-describedby="confirm-err"/>
+              <button class="field-icon field-icon--suf toggle-btn" type="button" id="toggle2" aria-label="Toggle confirm password">
+                <svg class="eye-show" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+                <svg class="eye-hide" viewBox="0 0 20 20" fill="currentColor" style="display:none"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/></svg>
+              </button>
+            </div>
+            <span class="field-error" id="confirm-err" aria-live="polite"></span>
+          </div>
+
+          <!-- Requirements checklist -->
+          <ul class="req-list" aria-label="Password requirements">
+            <li class="req-item" id="req-len">
+              <span class="req-icon">✕</span> At least 8 characters
+            </li>
+            <li class="req-item" id="req-upper">
+              <span class="req-icon">✕</span> One uppercase letter
+            </li>
+            <li class="req-item" id="req-num">
+              <span class="req-icon">✕</span> One number
+            </li>
+            <li class="req-item" id="req-special">
+              <span class="req-icon">✕</span> One special character
+            </li>
+          </ul>
+
+          <button class="btn-login btn-setup" type="submit" id="setupBtn" disabled>
+            <span class="btn-setup__text">Save Password &amp; Continue</span>
+            <span class="btn-setup__spinner" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10" stroke-opacity=".25"/>
+                <path d="M12 2a10 10 0 0110 10"/>
+              </svg>
+            </span>
+            <svg class="btn-login__arrow" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </button>
+
+        </form>
+
+        <p class="form-footer">Authorized personnel only &bull; ESMS v1.0</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="setup.js"></script>
+</body>
+</html>
