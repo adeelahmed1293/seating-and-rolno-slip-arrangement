@@ -1,34 +1,43 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  margin: 0;
-  min-height: 100%;
-}
 
 @media print {
-
+  /* Sab kuch hide karo */
   body * {
     visibility: hidden;
   }
 
-  #print-area, #print-area * {
+  /* Sirf print-area aur uske andar ka content visible karo */
+  #print-area,
+  #print-area * {
     visibility: visible;
   }
 
   #print-area {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+    background: white !important;
+    margin: 0;
+    padding: 0;
   }
 
-  article {
-    page-break-after: always; /* 👈 each student new page */
+  /* Page settings */
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  /* Har slip alag page pe */
+  #print-area > div {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Last slip ke baad extra blank page na aaye */
+  #print-area > div:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
   }
 }

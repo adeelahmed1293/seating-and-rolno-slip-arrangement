@@ -10,7 +10,7 @@ function App() {
   const [slips, setSlips] = useState([]);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
-
+  const [reversed, setReversed] = useState(false);
   const handleSelectFile = async () => {
     try {
       const data = await window.api.selectExcel();
@@ -30,19 +30,32 @@ function App() {
 
   const filteredSlips = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return slips;
+    let result = slips;
 
-    return slips.filter((student) =>
-      [student.name, student.roll, student.class]
-        .filter(Boolean)
-        .some((value) => String(value).toLowerCase().includes(query)),
-    );
-  }, [search, slips]);
+    if (query) {
+      result = slips.filter((student) =>
+        [student.name, student.roll, student.class]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(query)),
+      );
+    }
+
+    return reversed ? [...result].reverse() : result;
+  }, [search, slips, reversed]);
+  const handlePrint = async () => {
+    const result = await window.api.printPDF();
+    if (result?.success) {
+      setMessage(`PDF saved: ${result.filePath}`);
+    } else {
+      setMessage("PDF save nahi ho saka.");
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl shadow-slate-950/40">
+    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-10 print:bg-white print:p-0">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 print:max-w-none print:gap-0">
+        {/* ── TOP CONTROLS — hide on print ─────────────────────────────── */}
+        <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl shadow-slate-950/40 print:hidden">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-widest text-indigo-400">
@@ -72,7 +85,6 @@ function App() {
                 Generate Roll Slips
               </button>
               
-    
             </div>
           </div>
 
@@ -83,7 +95,8 @@ function App() {
           ) : null}
         </section>
 
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {/* ── STAT CARDS — hide on print ────────────────────────────────── */}
+        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 print:hidden">
           <StatCard
             label="Students Loaded"
             value={students.length}
@@ -102,40 +115,75 @@ function App() {
           />
         </section>
 
-        <UploadDateSheet
-          setParsedData={setParsedData}
-          setPreviewTableData={setDateSheetPreview}
-          setMessage={setMessage}
-        />
-       
-    
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/40">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* ── DATE SHEET UPLOAD — hide on print ────────────────────────── */}
+        <div className="print:hidden">
+          <UploadDateSheet
+            setParsedData={setParsedData}
+            setPreviewTableData={setDateSheetPreview}
+            setMessage={setMessage}
+          />
+        </div>
+
+        {/* ── SLIPS SECTION ─────────────────────────────────────────────── */}
+        <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/40 print:border-none print:bg-white print:p-0 print:shadow-none">
+          {/* Header + search — hide on print */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between print:hidden">
             <h2 className="text-xl font-semibold text-white">
               Generated Slips
             </h2>
-                <button onClick={() => window.print()}>Download / Print PDF</button>
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search by name, roll, class..."
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none ring-indigo-500 transition focus:ring sm:max-w-xs"
-            />
+            <div className="flex items-center gap-2">
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by name, roll, class..."
+                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none ring-indigo-500 transition focus:ring sm:max-w-xs"
+              />
+              <button
+                onClick={handlePrint}
+                disabled={!filteredSlips.length}
+                className="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400 disabled:cursor-not-allowed disabled:bg-rose-800"
+              >
+                Download / Print PDF
+              </button>
+              <button
+                onClick={() => setReversed((prev) => !prev)}
+                title="Reverse slip order"
+                className={`flex items-center gap-1 rounded-lg border px-3 py-2 text-sm font-medium transition whitespace-nowrap
+        ${
+          reversed
+            ? "border-indigo-500 bg-indigo-500/20 text-indigo-300"
+            : "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700"
+        }`}
+              >
+                <span
+                  className={`transition-transform duration-200 ${reversed ? "rotate-180" : ""}`}
+                >
+                  ↑↓
+                </span>
+                {reversed ? "Reversed" : "Reverse"}
+              </button>
+            </div>
           </div>
 
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400 print:hidden">
             Showing {filteredSlips.length} of {slips.length} slips
           </p>
 
-          <div id="print-area" className="mt-4 space-y-4">
+          {/* ── PRINT AREA ────────────────────────────────────────────── */}
+          <div id="print-area" className="mt-4 bg-white print:mt-0">
             {filteredSlips.length ? (
               filteredSlips.map((student, index) => (
-                <RollSlip key={`${student.roll}-${index}`} student={student} />
+                <div
+                  key={`${student.roll}-${index}`}
+                  style={{ pageBreakAfter: "always", breakAfter: "page" ,borderBottom:"2px solid black" }}
+                >
+                  <RollSlip student={student} />
+                </div>
               ))
             ) : (
-              <p className="rounded-lg border border-dashed border-slate-700 p-5 text-sm text-slate-400">
-                Abhi slips available nahi hain. Files upload karke generate
-                karein.
+              <p className="rounded-lg border border-dashed border-slate-700 p-5 text-sm text-slate-400 print:hidden">
+                Slips are Not available right now. Upload files and Generate
+                Slips.
               </p>
             )}
           </div>

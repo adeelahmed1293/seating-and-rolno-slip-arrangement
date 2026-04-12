@@ -64,7 +64,7 @@ export default function UploadDateSheet({ setParsedData, setPreviewTableData, se
             ) : (
               <tr>
                 <td colSpan={2} className="px-3 py-4 text-center text-slate-500">
-                  Date sheet data yahan preview hogi.
+                  Date sheet Preview will appear here after you upload a file.
                 </td>
               </tr>
             )}
