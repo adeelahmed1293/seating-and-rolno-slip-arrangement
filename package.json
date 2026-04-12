@@ -1,29 +1,47 @@
 {
-  "name": "exam_sitting_arragements",
+  "name": "automatedrollnoslipgenrator",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-      "build": "electron-builder"
-
-  },
-  "keywords": [],
-  "author": "",
+  "main": "electron/main.js",
+  "description": "Automated Roll No Slip Generator Desktop App",
+  "author": "Taimoor",
   "license": "ISC",
-  "type": "commonjs",
+
+  "scripts": {
+    "start": "electron .",
+    "build-client": "npm run build --prefix client",
+    "dist": "npm run build-client && electron-builder"
+  },
+
+  "build": {
+    "appId": "com.rollslip.app",
+    "productName": "Roll Slip Generator",
+
+    "directories": {
+      "output": "dist"
+    },
+
+    "files": [
+  "electron/**/*",
+  "client/dist/**/*",
+  "package.json"
+],
+
+    "win": {
+      "target": "nsis"
+    }
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taimoor-ai/AutomatedRollNoSlipGeneratorForUni.git"
+  },
+
   "devDependencies": {
     "electron": "^41.2.0",
     "electron-builder": "^26.8.1"
   },
 
-  "build": {
-    "appId": "com.test.app",
-    "win": {
-      "target": "nsis"
-    }
-
-}
-
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
 }

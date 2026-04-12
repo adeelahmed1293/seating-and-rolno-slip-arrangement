@@ -1,43 +1,66 @@
-# Dependencies
+# =========================
+# Node modules
+# =========================
 node_modules/
-package-lock.json
-yarn.lock
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# IDE/Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-*.iml
-
-# OS files
-Thumbs.db
-.DS_Store
-
-# Build and distribution
+# =========================
+# Electron build output
+# =========================
 dist/
-build/
 out/
-release/
+build/
 
+# =========================
+# React build (Vite/CRA)
+# =========================
+client/dist/
+client/build/
+
+# =========================
 # Logs
-logs/
-*.log
+# =========================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-# Electron
-electron-builder-effective-config.yaml
+# =========================
+# Environment variables
+# =========================
+.env
+.env.local
+.env.development
+.env.production
 
-# Temporary files
-*.tmp
-.temp
-temp/
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Electron cache / temp
+# =========================
+*.log
+
+# =========================
+# Vite cache
+# =========================
+node_modules/.vite
+
+# =========================
+# PDF / generated outputs (IMPORTANT for your project)
+# =========================
+outputs/
+*.pdf
+
+# =========================
+# Uploads (Excel files temp storage)
+# =========================
+uploads/
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
