@@ -1,0 +1,47 @@
+<div class="pt">Dashboard</div>
+<div class="ps">Overview of both modules · FALL-2025 date sheet pre-loaded</div>
+
+<div class="stat-row">
+  <div class="sc cp"><div class="sn" id="d-students">0</div><div class="sl">Total Students</div></div>
+  <div class="sc ct"><div class="sn" id="d-rooms">0</div><div class="sl">Rooms Configured</div></div>
+  <div class="sc ca"><div class="sn" id="d-slips">0</div><div class="sl">Slips Ready</div></div>
+  <div class="sc cg"><div class="sn" id="d-conflicts">—</div><div class="sl">Conflicts Detected</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+  <div class="module-card">
+    <div class="mh purple">MODULE 01 — Anti-Cheat Seating Planner</div>
+    <div class="mb">
+      <div class="mg">
+        <div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div>
+        <div class="mc" style="background:#2A1010"></div><div class="mc" style="background:#102A18"></div><div class="mc" style="background:#2A1010"></div><div class="mc" style="background:#102A18"></div><div class="mc" style="background:#2A1010"></div><div class="mc" style="background:#102A18"></div><div class="mc" style="background:#2A1010"></div><div class="mc" style="background:#102A18"></div>
+        <div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div><div class="mc" style="background:#2D2040"></div><div class="mc" style="background:#1A2D20"></div>
+      </div>
+      <div id="d-m1-status" style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5">
+        No plan generated yet — import data to begin
+      </div>
+      <button class="btn btn-opk" onclick="nav('import')">Go to Seating Module →</button>
+    </div>
+  </div>
+  <div class="module-card">
+    <div class="mh teal">MODULE 02 — Student Roll Slip Generator</div>
+    <div class="mb">
+      <div style="margin-bottom:12px">
+        <div class="sk" style="width:90%"></div><div class="sk" style="width:70%"></div>
+        <div class="sk" style="width:80%"></div><div class="sk" style="width:60%"></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <div class="sk" style="width:40%;margin:0"></div>
+          <div class="sk" style="width:30%;margin:0"></div>
+        </div>
+      </div>
+      <div id="d-m2-status" style="font-size:12px;color:var(--muted);margin-bottom:12px">
+        Generate a seating plan first, then configure exam details
+      </div>
+      <button class="btn btn-ot" onclick="nav('datesheet')">Go to Slip Generator →</button>
+    </div>
+  </div>
+</div>
+
+<div class="alert a-info" style="margin-top:12px">
+  ℹ Import student roll data from Excel or CSV to begin. Use the Seating Module to generate the anti-cheat plan.
+</div>

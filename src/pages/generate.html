@@ -1,0 +1,36 @@
+<div class="pt">Generate Seating Plan</div>
+<div class="ps">M1 · P4 — Review checklist then fire the anti-cheat algorithm</div>
+
+<div class="chk-card">
+  <div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:8px">Pre-generation checklist</div>
+  <div class="ci">
+    <div class="cion ci-pend" id="chk1-i">⋯</div>
+    <div><div class="ci-ct">Classes Loaded</div><div class="ci-cd" id="chk1-d">No classes loaded</div></div>
+  </div>
+  <div class="ci">
+    <div class="cion ci-pend" id="chk2-i">⋯</div>
+    <div><div class="ci-ct">Room Groups Configured</div><div class="ci-cd" id="chk2-d">No rooms configured</div></div>
+  </div>
+  <div class="ci">
+    <div class="cion ci-pend" id="chk3-i">⋯</div>
+    <div><div class="ci-ct">Seat Capacity</div><div class="ci-cd" id="chk3-d">—</div></div>
+  </div>
+</div>
+
+<button class="btn-full bf-p" onclick="genRun()">▶ Generate Seating Plan</button>
+
+<div id="gen-res" style="display:none">
+  <div class="alert" id="gen-banner"></div>
+  <div class="sr" id="gen-stats"></div>
+  <div class="leg" id="gen-leg"></div>
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="nav('roomview')"><span style="color:var(--muted)">→</span> View Room Layouts</button>
+    <button class="nav-btn" onclick="nav('directory')"><span style="color:var(--muted)">→</span> View Roll Directory</button>
+    <button class="nav-btn" onclick="genExportAll()"><span style="color:var(--muted)">→</span> Export Rooms CSV</button>
+    <button class="nav-btn" onclick="genExportSummary()"><span style="color:var(--muted)">→</span> Export Summary CSV</button>
+  </div>
+</div>
+
+<div class="btn-row" style="margin-top:12px">
+  <button class="btn" onclick="nav('rooms')">← Back</button>
+</div>

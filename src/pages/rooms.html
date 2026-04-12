@@ -1,0 +1,28 @@
+<div class="pt">Room Groups Configuration</div>
+<div class="ps">M1 · P3 — Define room sizes and counts for the exam</div>
+
+<div class="cap-bar">
+  <div class="cap-stat">
+    <div class="cap-n" id="cap-seats">0</div>
+    <div class="cap-l">Total Seats Available</div>
+  </div>
+  <div class="cap-div"></div>
+  <div class="cap-stat">
+    <div class="cap-n" id="cap-stud">0</div>
+    <div class="cap-l">Total Students</div>
+  </div>
+  <div class="cap-div"></div>
+  <div id="cap-status"><span class="pill pt-grey">Configure rooms below</span></div>
+</div>
+
+<div id="rglist"></div>
+
+<button class="btn-dash" onclick="rgAdd()">+ Add Room Group</button>
+<div style="font-size:10px;color:var(--muted);font-style:italic;margin-top:8px">
+  4-class checkerboard · Anti-cheat · Zero 8-neighbour conflicts guaranteed
+</div>
+
+<div class="btn-row" style="margin-top:12px">
+  <button class="btn" onclick="nav('classes')">← Back</button>
+  <button class="btn btn-p" onclick="nav('generate')">Next: Generate Plan →</button>
+</div>

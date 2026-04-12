@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+<title>Exam Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR — persistent across all pages -->
+  <div class="sidebar">
+    <div class="logo-area">
+      <div class="logo-title">Exam Management System</div>
+      <div class="logo-sub">Electron · Node.js · MVVM</div>
+    </div>
+    <div class="nav-sl">Overview</div>
+    <div class="ni" id="nav-dash"      onclick="nav('dash')">
+      <div class="nd" style="background:#5B4FD6"></div><span class="nl">Dashboard</span>
+    </div>
+    <div class="nav-sl">Seating Module</div>
+    <div class="ni" id="nav-import"    onclick="nav('import')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Import Data</span>
+    </div>
+    <div class="ni" id="nav-classes"   onclick="nav('classes')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Class Manager</span>
+    </div>
+    <div class="ni" id="nav-rooms"     onclick="nav('rooms')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Room Groups</span>
+    </div>
+    <div class="ni" id="nav-generate"  onclick="nav('generate')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Generate Plan</span>
+    </div>
+    <div class="ni" id="nav-roomview"  onclick="nav('roomview')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Room View</span>
+    </div>
+    <div class="ni" id="nav-directory" onclick="nav('directory')">
+      <div class="nd" style="background:#E91E8C"></div><span class="nl">Roll Directory</span>
+    </div>
+    <div class="nav-sl">Roll Slips</div>
+    <div class="ni" id="nav-datesheet" onclick="nav('datesheet')">
+      <div class="nd" style="background:#00A896"></div><span class="nl">Upload Date Sheet</span>
+    </div>
+    <div class="ni" id="nav-slips"     onclick="nav('slips')">
+      <div class="nd" style="background:#00A896"></div><span class="nl">Slip Preview &amp; Export</span>
+    </div>
+  </div>
+
+  <!-- CONTENT — pages load here -->
+  <div class="content" id="content">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:13px">
+      Loading…
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- xlsx bundled for offline use -->
+<script src="./xlsx.full.min.js"></script>
+<!-- App router — ES module -->
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

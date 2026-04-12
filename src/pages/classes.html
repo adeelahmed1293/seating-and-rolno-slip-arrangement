@@ -1,0 +1,36 @@
+<div class="pt">Class Manager</div>
+<div class="ps">M1 · P2 — Review and edit loaded classes before generation</div>
+
+<div id="cls-warn" style="display:none" class="alert a-warn">
+  ⚠ Class data changed — please regenerate the seating plan.
+</div>
+
+<div class="ttb">
+  <button class="btn" style="border-color:rgba(26,138,90,0.4);background:rgba(26,138,90,0.12);color:var(--tl)" onclick="clsAdd()">+ Add Class</button>
+  <button class="btn btn-d" onclick="clsRemoveSel()">− Remove Selected</button>
+  <button class="btn" onclick="clsReset()">↺ Reset All</button>
+  <span style="margin-left:auto;font-size:10px;color:var(--muted)">Click row to select</span>
+</div>
+<div class="tw" style="max-height:340px">
+  <table>
+    <thead><tr>
+      <th style="width:30px">#</th>
+      <th style="width:20px">Color</th>
+      <th>Class Name</th>
+      <th style="width:80px">Students</th>
+      <th style="width:70px">Placed</th>
+      <th style="width:70px">Left</th>
+      <th style="width:36px"></th>
+    </tr></thead>
+    <tbody id="ctbody"></tbody>
+  </table>
+</div>
+<div class="tst">
+  <span id="cls-stat">No classes loaded</span>
+  <span>Next: Room Groups →</span>
+</div>
+
+<div class="btn-row" style="margin-top:8px">
+  <button class="btn" onclick="nav('import')">← Back</button>
+  <button class="btn btn-p" onclick="nav('rooms')">Next: Room Groups →</button>
+</div>

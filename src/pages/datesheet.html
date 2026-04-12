@@ -1,0 +1,48 @@
+<div class="pt">Exam Configuration</div>
+<div class="ps">M2 · P1 — Configure exam details used on every roll slip</div>
+
+<div class="card">
+  <div class="ctitle">University &amp; Exam Details</div>
+  <div class="efg">
+    <div class="fi" style="grid-column:1/3">
+      <label>University / Institution Name</label>
+      <input id="ei-uni" value="FAST – National University of Computer &amp; Emerging Sciences" placeholder="University name">
+    </div>
+    <div class="fi">
+      <label>Exam Name</label>
+      <input id="ei-exam" value="Final Examination" placeholder="e.g. Mid-Term, Final">
+    </div>
+    <div class="fi">
+      <label>Exam Date</label>
+      <input id="ei-date" value="12-Dec-2025" placeholder="DD-Mon-YYYY">
+    </div>
+    <div class="fi">
+      <label>Day</label>
+      <input id="ei-day" value="Thursday" placeholder="e.g. Monday">
+    </div>
+    <div class="fi">
+      <label>Time</label>
+      <input id="ei-time" value="10:30 AM" placeholder="HH:MM AM/PM">
+    </div>
+    <div class="fi">
+      <label>Block / Venue</label>
+      <input id="ei-block" value="Block A" placeholder="e.g. Block A, Main Hall">
+    </div>
+    <div class="fi">
+      <label>Short Name (Logo)</label>
+      <input id="ei-short" value="FAST" placeholder="Short name for circle logo">
+    </div>
+  </div>
+  <div class="alert a-info">
+    These details appear on every student's roll slip. You can change them anytime before exporting.
+  </div>
+</div>
+
+<div class="alert a-warn" id="ds-no-plan" style="display:none">
+  ⚠ Generate a seating plan first before building slips.
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-t" onclick="dsSaveAndPreview()">Save &amp; Preview Slips →</button>
+  <button class="btn" onclick="nav('generate')">← Go Generate Plan</button>
+</div>
