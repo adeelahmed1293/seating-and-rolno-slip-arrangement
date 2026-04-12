@@ -52,100 +52,100 @@ function safeSrc(val) {
   return typeof val === "string" && val.trim() ? val.trim() : null;
 }
 
-export default function RollSlip({ student }) {
+export default function RollSlip({ student, compact = false }) {
+  console.log("student = ",student)
   const data = student !== null && typeof student === "object" ? student : {};
-  console.log("student :", data);
 
   const name = safeStr(data.Name);
-  const regNo = safeStr(data["Reg#"] ?? data.reg ?? data.rollNo);
+  const regNo = safeStr(
+    data["Reg#"] ??
+      data["reg#"] ??
+      data["REG#"] ??
+      data["rollNo"] ??
+      data["Roll No"] ??
+      data.rollNo ??
+      data.regNo,
+  );
   const discipline = safeStr(data.Class ?? data.class);
 
   const sortedExams = [...safeExams(data.exams)].sort((a, b) => {
     return parseDate(a.date) - parseDate(b.date);
   });
   const exams = sortedExams;
-  // const logoSrc = safeSrc(data.logoSrc);
+
   const signatureSrc = safeSrc(data.signatureSrc) || Signature;
   const photoSrc = safeSrc(data.__image__);
+
   const examHeld = (() => {
     if (!sortedExams.length) return "—";
-
     const dates = sortedExams
       .map((e) => parseDate(e.date))
       .filter((d) => !isNaN(d));
-
     const minDate = new Date(Math.min(...dates));
     const maxDate = new Date(Math.max(...dates));
-
     return `${formatDate(minDate)} to ${formatDate(maxDate)}`;
   })();
+
   const examSession = (() => {
     if (!sortedExams.length) return "";
-
     const month = parseDate(sortedExams[0].date).getMonth() + 1;
-
     if (month >= 1 && month <= 5) return "Spring Semester";
     if (month >= 8 && month <= 12) return "Fall Semester";
-
     return "Mid Semester";
   })();
+
+  // ── layout tokens based on compact mode ──
+  const outerPad    = compact ? "6px 48px 10px"  : "20px 48px 30px";
+  const headerPad   = compact ? "4px 12px"        : "10px 12px";
+  const headerMinH  = compact ? 88                : 110;
+  const photoW      = compact ? 76                : 90;
+  const photoH      = compact ? 84                : 100;
+  const photoTop    = compact ? "top-1"           : "top-2";
+  const metaFont    = compact ? 10                : 12;
+  const metaPad     = compact ? "2px 8px"         : "5px 10px";
+  const metaMT      = compact ? 3                 : 6;
+  const tableFont   = compact ? 10                : 11;
+  const tablePad    = compact ? "2px 6px"         : "5px 8px";
+  const noteFont    = compact ? 9.5               : 11;
+  const noteLH      = compact ? 1.45              : 1.6;
+  const notePad     = compact ? "3px 8px"         : "8px 10px";
+  const sigPad      = compact ? "4px 12px 8px"    : "10px 16px 14px";
+  const sigImgH     = compact ? 44                : 60;
+  const sigMT       = compact ? 48                : 64;
+  const titleFont   = compact ? 12                : 14;
+  const subFont     = compact ? 10                : 11;
+  const h2Font      = compact ? 11                : 13;
+  const nameFont    = compact ? 12                : 14;
+
   return (
-    // Outer wrapper — charon taraf se padding
-    <div className="px-25 py-10">
+    <div style={{ padding: outerPad }}>
       <article
-        className="overflow-hidden  border-amber-950 bg-white text-black print:border-black"
+        className="overflow-hidden bg-white text-black"
         style={{ fontFamily: '"Times New Roman", Times, serif' }}
       >
-        {/* ── HEADER ─────────────────────────────────────────────────────────── */}
-        <header className="relative px-4 py-2">
-          {/* Institute logo — top-left */}
-          {/* <div
-            className="absolute left-3 top-1/2 -translate-y-1/2"
-            style={{ width: 64, height: 64 }}
-          >
-            {logoSrc ? (
-              <img
-                src={logoSrc}
-                alt="Institute logo"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            ) : (
-              <div
-                className="flex h-full w-full items-center justify-center rounded border border-dashed border-gray-400 bg-gray-50 text-center text-gray-400"
-                style={{ fontSize: 9, lineHeight: 1.3 }}
-                title="Pass logoSrc prop to display the institute logo"
-              >
-                Logo
-              </div>
-            )}
-          </div> */}
-
-          {/* Centred text — padded to clear logo on left and photo on right */}
-          <div
-            className="text-center"
-            style={{ paddingLeft: 76, paddingRight: 88 }}
-          >
-            <p className="text-sm font-bold leading-snug">
+        {/* ── HEADER ── */}
+        <header className="relative" style={{ padding: headerPad, minHeight: headerMinH }}>
+          <div className="text-center" style={{ paddingLeft: 76, paddingRight: 94 }}>
+            <p style={{ fontSize: titleFont, fontWeight: "bold", lineHeight: 1.3, margin: 0 }}>
               Dr. A. Q. Khan Institute of Computer Sciences
             </p>
-            <p className="text-xs leading-snug">&amp; Information Technology</p>
-            <p className="text-xs leading-snug">KRL, Kahuta</p>
-            <h2 className="mt-1 text-sm underline">
-              Roll No. Slip of{" "}
-              <span className="font-bold text-base">{name.toUpperCase()}</span>
+            <p style={{ fontSize: subFont, lineHeight: 1.3, margin: 0 }}>
+              &amp; Information Technology
+            </p>
+            <p style={{ fontSize: subFont, lineHeight: 1.3, margin: 0 }}>KRL, Kahuta</p>
+            <h2 style={{ fontSize: h2Font, marginTop: compact ? 2 : 4, marginBottom: 0, textDecoration: "underline" }}>
+              Roll No Slip of{"     "}
+              <span style={{ fontWeight: "bold", fontSize: nameFont }}>{name.toUpperCase()}</span>
             </h2>
           </div>
 
-          {/* Student passport photo — top-right */}
+          {/* Passport photo */}
           <div
-            className="absolute right-3 top-1/2 -translate-y-1/2"
+            className={`absolute right-3 ${photoTop}`}
             style={{
-              width: 90,
-              height: 95,
-              borderRadius: 4,
+              width: photoW,
+              height: photoH,
+              borderRadius: 3,
               border: "2px solid #1a1a2e",
               overflow: "hidden",
               backgroundColor: "#f0f0f0",
@@ -166,14 +166,11 @@ export default function RollSlip({ student }) {
                 }}
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
-                  if (e.currentTarget.nextSibling) {
+                  if (e.currentTarget.nextSibling)
                     e.currentTarget.nextSibling.style.display = "flex";
-                  }
                 }}
               />
             ) : null}
-
-            {/* Fallback silhouette */}
             <div
               style={{
                 display: photoSrc ? "none" : "flex",
@@ -183,182 +180,111 @@ export default function RollSlip({ student }) {
                 height: "100%",
                 width: "100%",
                 backgroundColor: "#e8e8e8",
-                gap: 4,
+                gap: 3,
               }}
             >
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: "50%",
-                  backgroundColor: "#b0b0b0",
-                }}
-              />
-              <div
-                style={{
-                  width: 44,
-                  height: 22,
-                  borderRadius: "22px 22px 0 0",
-                  backgroundColor: "#b0b0b0",
-                  marginTop: 2,
-                }}
-              />
-              <p
-                style={{
-                  fontSize: 8,
-                  color: "#888",
-                  margin: 0,
-                  marginTop: 4,
-                  fontFamily: "Arial, sans-serif",
-                }}
-              >
+              <div style={{ width: 22, height: 22, borderRadius: "50%", backgroundColor: "#b0b0b0" }} />
+              <div style={{ width: 36, height: 18, borderRadius: "18px 18px 0 0", backgroundColor: "#b0b0b0", marginTop: 2 }} />
+              <p style={{ fontSize: 7, color: "#888", margin: 0, marginTop: 3, fontFamily: "Arial, sans-serif" }}>
                 No Photo
               </p>
             </div>
           </div>
         </header>
 
-        {/* ── STUDENT META ───────────────────────────────────────────────────── */}
-        <div className="grid mt-3.5 grid-cols-2 border-b border-gray-800 text-xs">
-          <p className="border border-gray-800 px-3 py-1">
-            <span className="font-bold">Name: </span>
-            {name}
+        {/* ── STUDENT META ── */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid #1f2937", fontSize: metaFont, marginTop: metaMT }}>
+          <p style={{ margin: 0, padding: metaPad, border: "1px solid #1f2937" }}>
+            <span style={{ fontWeight: "bold" }}>Name: </span>{name}
           </p>
-          <p className="px-3 border border-gray-800 py-1">
-            <span className="font-bold">Roll No: </span>
-            {regNo}
+          <p style={{ margin: 0, padding: metaPad, border: "1px solid #1f2937" }}>
+            <span style={{ fontWeight: "bold" }}>Roll No: </span>{regNo}
           </p>
-          <p className="border-r border border-gray-800 px-3 py-1">
-            <span className="font-bold">Discipline: </span>
-            {discipline}
+          <p style={{ margin: 0, padding: metaPad, border: "1px solid #1f2937" }}>
+            <span style={{ fontWeight: "bold" }}>Discipline: </span>{discipline}
           </p>
-          <p className="px-3 border py-1">
-            <span className="font-bold">Examination held in: </span>
+          <p style={{ margin: 0, padding: metaPad, border: "1px solid #1f2937" }}>
+            <span style={{ fontWeight: "bold" }}>Examination held in: </span>
             {examHeld} ({examSession})
           </p>
         </div>
 
-        {/* ── INTRO LINE ─────────────────────────────────────────────────────── */}
-        <p className="border-b border-gray-800 px-3 py-1 text-xs">
+        {/* ── INTRO LINE ── */}
+        <p style={{ borderBottom: "1px solid #1f2937", padding: metaPad, fontSize: metaFont, margin: 0 }}>
           End term papers are arranged according to the following date sheet:
         </p>
 
-        {/* ── EXAM TABLE ─────────────────────────────────────────────────────── */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse text-xs">
+        {/* ── EXAM TABLE ── */}
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: tableFont }}>
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-800 px-2 py-1 text-center w-12">
-                  S.No.
-                </th>
-                <th className="border border-gray-800 px-2 py-1 text-left">
-                  Subject
-                </th>
-                <th className="border border-gray-800 px-2 py-1 text-center w-24">
-                  Date
-                </th>
-                <th className="border border-gray-800 px-2 py-1 text-center w-14">
-                  Day
-                </th>
+              <tr style={{ backgroundColor: "#f3f4f6" }}>
+                <th style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center", width: 36 }}>S.No.</th>
+                <th style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "left" }}>Subject</th>
+                <th style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center", width: 72 }}>Date</th>
+                <th style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center", width: 44 }}>Day</th>
               </tr>
             </thead>
             <tbody>
               {exams.length > 0
                 ? exams.map((exam, idx) => {
                     const subject = safeStr(exam?.subject ?? exam?.Subject, "");
-                    const date = safeStr(exam?.date ?? exam?.Date, "");
-                    const day = getDayFromDate(date);
+                    const date    = safeStr(exam?.date   ?? exam?.Date,    "");
+                    const day     = getDayFromDate(date);
                     return (
                       <tr key={idx}>
-                        <td className="border border-gray-800 px-2 py-1 text-center">
-                          {idx + 1}.
+                        <td style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center" }}>{idx + 1}.</td>
+                        <td style={{ border: "1px solid #1f2937", padding: tablePad }}>
+                          {subject || <span style={{ color: "#9ca3af" }}>—</span>}
                         </td>
-                        <td className="border border-gray-800 px-2 py-1">
-                          {subject || <span className="text-gray-400">—</span>}
-                        </td>
-                        <td className="border border-gray-800 px-2 py-1 text-center">
-                          {date || "—"}
-                        </td>
-                        <td className="border border-gray-800 px-2 py-1 text-center">
-                          {day || "—"}
-                        </td>
+                        <td style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center" }}>{date || "—"}</td>
+                        <td style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center" }}>{day || "—"}</td>
                       </tr>
                     );
                   })
                 : Array.from({ length: 5 }).map((_, idx) => (
                     <tr key={idx}>
-                      <td className="border border-gray-800 px-2 py-1 text-center text-gray-400">
-                        {idx + 1}.
-                      </td>
-                      <td className="border border-gray-800 px-2 py-1" />
-                      <td className="border border-gray-800 px-2 py-1" />
-                      <td className="border border-gray-800 px-2 py-1" />
+                      <td style={{ border: "1px solid #1f2937", padding: tablePad, textAlign: "center", color: "#9ca3af" }}>{idx + 1}.</td>
+                      <td style={{ border: "1px solid #1f2937", padding: tablePad }} />
+                      <td style={{ border: "1px solid #1f2937", padding: tablePad }} />
+                      <td style={{ border: "1px solid #1f2937", padding: tablePad }} />
                     </tr>
                   ))}
             </tbody>
           </table>
         </div>
 
-        {/* ── NOTES ──────────────────────────────────────────────────────────── */}
-        <div className="border-t border-gray-800 px-3 py-2 text-xs leading-relaxed">
-          <p className="font-bold">Note:</p>
-          <p>
-            01. Paper will start at <strong>10:30 hrs</strong> and Friday paper
-            will start at <strong>09:30 hrs.</strong>
-          </p>
-          <p>
-            02. Hall entry timing is <strong>15 minutes</strong> before the
-            start of paper and be seated within 5 minutes.
-          </p>
-          <p>
-            03. In Case of Fee Defaulters or Shortage of Attendance, as Notified
-            by KICSIT Management, Students will not be allowed to sit in Exams.
-          </p>
-          <p>
-            04. Mobile Phones &amp; all Communication Devices are strictly
-            prohibited in examination hall.
-          </p>
-          <p>
-            05. Exchange of Stationery and <strong>Calculators</strong> are not
-            allowed during exams.
-          </p>
-          <p>06. Students should bring their own water bottles during exams.</p>
-          <p>
-            07. Students will be{" "}
-            <strong>responsible for their belongings</strong>. KICSIT management
-            will not take any responsibility in case of any damage/loss.
-          </p>
+        {/* ── NOTES ── */}
+        <div style={{ borderTop: "1px solid #1f2937", padding: notePad, fontSize: noteFont, lineHeight: noteLH }}>
+          <p style={{ fontWeight: "bold", margin: 0 }}>Note:</p>
+          <p style={{ margin: 0 }}>01. Paper will start at <strong>10:30 hrs</strong> and Friday paper will start at <strong>09:30 hrs.</strong></p>
+          <p style={{ margin: 0 }}>02. Hall entry timing is <strong>15 minutes</strong> before the start of paper and be seated within 5 minutes.</p>
+          <p style={{ margin: 0 }}>03. In Case of Fee Defaulters or Shortage of Attendance, as Notified by KICSIT Management, Students will not be allowed to sit in Exams.</p>
+          <p style={{ margin: 0 }}>04. Mobile Phones &amp; all Communication Devices are strictly prohibited in examination hall.</p>
+          <p style={{ margin: 0 }}>05. Exchange of Stationery and <strong>Calculators</strong> are not allowed during exams.</p>
+          <p style={{ margin: 0 }}>06. Students should bring their own water bottles during exams.</p>
+          <p style={{ margin: 0 }}>07. Students will be <strong>responsible for their belongings</strong>. KICSIT management will not take any responsibility in case of any damage/loss.</p>
         </div>
 
-        {/* ── SIGNATURE ──────────────────────────────────────────────────────── */}
-        <div className="border-t border-gray-800 px-4 pb-4 pt-6 text-right text-xs relative">
-          <div className="inline-block text-right relative">
-            <div className="absolute right-0 top-2">
+        {/* ── SIGNATURE ── */}
+        <div style={{ borderTop: "1px solid #1f2937", padding: sigPad, textAlign: "right", fontSize: 10, position: "relative" }}>
+          <div style={{ display: "inline-block", textAlign: "right", position: "relative" }}>
+            <div style={{ position: "absolute", right: 0, top: 30 }}>
               {signatureSrc ? (
                 <img
                   src={signatureSrc}
                   alt="Controller of Examinations signature"
-                  style={{
-                    height: 60,
-                    maxWidth: 160,
-                    objectFit: "contain",
-                  }}
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
+                  style={{ height: sigImgH, maxWidth: 130, objectFit: "contain" }}
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
                 />
               ) : (
-                <div
-                  className="flex items-center justify-center rounded border border-dashed border-gray-400 bg-gray-50 text-gray-400"
-                  style={{ width: 160, height: 56, fontSize: 9 }}
-                >
+                <div style={{ width: 130, height: sigImgH, fontSize: 9, display: "flex", alignItems: "center", justifyContent: "center", border: "1px dashed #9ca3af", backgroundColor: "#f9fafb", color: "#9ca3af", borderRadius: 3 }}>
                   Signature image
                 </div>
               )}
             </div>
-
-            <p className="mt-10">______________________________________</p>
-            <p className="text-gray-500">Deputy Controller of Examinations</p>
+            <p style={{ marginTop: sigMT, marginBottom: 0 }}>______________________________________</p>
+            <p style={{ margin: 0, color: "#6b7280" }}>Deputy Controller of Examinations</p>
           </div>
         </div>
       </article>

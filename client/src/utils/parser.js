@@ -156,7 +156,7 @@ export function generateRollSlips(students, parsedData) {
   return students.map((student) => {
     return {
       ...student,
-      exams: classMap[student.class] || [] // 👈 key logic
+      exams: classMap[student.Class] || classMap[student.Class]||[]// 👈 key logic
     };
   });
 }

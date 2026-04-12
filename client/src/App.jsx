@@ -4,6 +4,7 @@ import { generateRollSlips } from "./utils/parser";
 import RollSlip from "./components/RollSlip";
 
 function App() {
+  const [slipsPerPage, setSlipsPerPage] = useState(2);
   const [students, setStudents] = useState([]);
   const [parsedData, setParsedData] = useState([]);
   const [dateSheetPreview, setDateSheetPreview] = useState([]);
@@ -84,7 +85,6 @@ function App() {
               >
                 Generate Roll Slips
               </button>
-              
             </div>
           </div>
 
@@ -164,6 +164,12 @@ function App() {
               </button>
             </div>
           </div>
+          <button
+            onClick={() => setSlipsPerPage((p) => (p === 2 ? 1 : 2))}
+            className="rounded-lg bg-violet-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-400"
+          >
+            {slipsPerPage === 2 ? "2 Per Page" : "1 Per Page"}
+          </button>
 
           <p className="mt-2 text-sm text-slate-400 print:hidden">
             Showing {filteredSlips.length} of {slips.length} slips
@@ -171,21 +177,42 @@ function App() {
 
           {/* ── PRINT AREA ────────────────────────────────────────────── */}
           <div id="print-area" className="mt-4 bg-white print:mt-0">
-            {filteredSlips.length ? (
-              filteredSlips.map((student, index) => (
-                <div
-                  key={`${student.roll}-${index}`}
-                  style={{ pageBreakAfter: "always", breakAfter: "page" ,borderBottom:"2px solid black" }}
-                >
-                  <RollSlip student={student} />
-                </div>
-              ))
-            ) : (
-              <p className="rounded-lg border border-dashed border-slate-700 p-5 text-sm text-slate-400 print:hidden">
-                Slips are Not available right now. Upload files and Generate
-                Slips.
-              </p>
-            )}
+            {slipsPerPage === 2
+              ? // existing pair logic
+                Array.from({ length: Math.ceil(filteredSlips.length / 2) }).map(
+                  (_, pageIdx) => {
+                    const first = filteredSlips[pageIdx * 2];
+                    const second = filteredSlips[pageIdx * 2 + 1];
+                    return (
+                      <div
+                        key={pageIdx}
+                        style={{ pageBreakAfter: "always", breakAfter: "page" }}
+                      >
+                        <RollSlip student={first} compact={true}/>
+                        {second && (
+                          <>
+                            <div
+                              style={{
+                                borderTop: "1px dashed #999",
+                                margin: "0 40px",
+                              }}
+                            />
+                            <RollSlip student={second} compact={true} />
+                          </>
+                        )}
+                      </div>
+                    );
+                  },
+                )
+              : // 1 per page
+                filteredSlips.map((student, index) => (
+                  <div
+                    key={`${student.roll}-${index}`}
+                    style={{ pageBreakAfter: "always", breakAfter: "page" }}
+                  >
+                    <RollSlip student={student} compact= {false}/>
+                  </div>
+                ))}
           </div>
         </section>
       </div>
