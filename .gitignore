@@ -41,3 +41,4 @@ electron-builder-effective-config.yaml
 *.tmp
 .temp
 temp/
+
