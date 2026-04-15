@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  background: #0B0C10;
+  color: #E2E3F0;
+  margin: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #13141A; }
+::-webkit-scrollbar-thumb { background: #2A2B38; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #5B4FD6; }
+
+/* Seat hover */
+.seat { transition: filter 0.1s, transform 0.1s; }
+.seat:hover { filter: brightness(1.22); transform: scale(1.07); z-index: 3; }
+.seat .tooltip { display: none; }
+.seat:hover .tooltip { display: block; }
+
+/* Page transition */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: none; }
+}
+.fade-in { animation: fadeIn 0.15s ease; }
+
+/* Hide number input spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }

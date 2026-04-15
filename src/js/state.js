@@ -6,7 +6,7 @@ export const state = {
   classes:   [],
   roomGroups:[
     { rows:7, cols:6,  rooms:8, name:'Group 1 — Block A' },
-    { rows:4, cols:10, rooms:4, name:'Group 2 — Block B' }
+    { rows:10, cols:4, rooms:4, name:'Group 2 — Block B' }
   ],
   result:    null,
   slips:     [],

@@ -1,29 +1,56 @@
 {
-  "name": "exam_sitting_arragements",
+  "name": "exam-management-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Exam Seating Planner & Roll Slip Generator",
+  "main": "electron/main.js",
+  "author": "Adeel",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-      "build": "electron-builder"
-
+    "dev":        "concurrently -n CLIENT,ELECTRON -c cyan,yellow \"npm run dev --prefix client\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "build":      "npm run build --prefix client",
+    "dist":       "npm run build && electron-builder",
+    "dist:win":   "npm run build && electron-builder --win",
+    "dist:mac":   "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "dependencies": {},
   "devDependencies": {
-    "electron": "^41.2.0",
-    "electron-builder": "^26.8.1"
+    "concurrently":    "^8.2.2",
+    "cross-env":       "^7.0.3",
+    "electron":        "^30.0.1",
+    "electron-builder":"^24.13.3",
+    "wait-on":         "^7.2.0"
   },
-
   "build": {
-    "appId": "com.test.app",
+    "appId":       "com.exam.management",
+    "productName": "Exam Management System",
+    "icon":        "assets/icon",
+    "directories": { "output": "release" },
+    "files": [
+      "electron/**/*",
+      "client/dist/**/*",
+      "assets/**/*",
+      "!**/node_modules/**"
+    ],
+    "extraFiles": [
+      { "from": "client/dist", "to": "client/dist" }
+    ],
     "win": {
-      "target": "nsis"
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
+    },
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["x64","arm64"] }],
+      "category": "public.app-category.education"
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "category": "Education"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Exam Management System"
     }
-
-}
-
+  }
 }
