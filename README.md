@@ -23,11 +23,18 @@ A fully offline desktop application for generating anti-cheat exam seating plans
 
 ### Run in development
 ```bash
-# 1. Install dependencies
+# 1. Install client dependencies
+cd client
 npm install
 
-# 2. Start the app
-npm start
+# 2. Return to root
+cd ..
+
+# 3. Install root dependencies
+npm install
+
+# 4. Start the app
+npm run dev
 ```
 
 ---
@@ -67,15 +74,71 @@ npm run build
 
 ```
 exam-seating-planner/
-├── main.js          ← Electron main process (window, IPC, menus)
-├── preload.js       ← contextBridge API exposed to renderer
-├── package.json     ← deps + electron-builder config
-├── src/
-│   ├── index.html   ← Full app UI + logic
-│   └── xlsx.full.min.js  ← Bundled XLSX library (offline)
-├── assets/
-│   └── icon.png     ← App icon (replace with your own 256×256 PNG)
-└── dist/            ← Built installers (generated)
+├── package.json          ← Root dependencies and scripts
+├── README.md
+├── client/               ← React frontend (Vite + Tailwind)
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── index.html
+│   └── src/
+│       ├── main.jsx      ← React app entry
+│       ├── App.jsx       ← Main app component
+│       ├── index.css
+│       ├── components/   ← Reusable UI components
+│       │   ├── Sidebar.jsx
+│       │   ├── Toast.jsx
+│       │   └── ui.jsx
+│       ├── pages/        ← Page components
+│       │   ├── Dashboard.jsx
+│       │   ├── ClassManager.jsx
+│       │   ├── DateSheet.jsx
+│       │   ├── GeneratePlan.jsx
+│       │   ├── ImportData.jsx
+│       │   ├── RollDirectory.jsx
+│       │   ├── RoomGroups.jsx
+│       │   ├── RoomView.jsx
+│       │   └── SlipPreview.jsx
+│       └── utils/        ← Utility functions
+│           ├── exportUtils.js
+│           ├── fileImport.js
+│           ├── palette.js
+│           ├── seating.js
+│           └── store.js
+├── electron/             ← Electron main process
+│   ├── main.js           ← Window management, IPC
+│   └── preload.js        ← Context bridge API
+└── src/                  ← Legacy static files
+    ├── index.html
+    ├── xlsx.full.min.js  ← XLSX library
+    ├── css/
+    │   └── style.css
+    ├── js/
+    │   ├── algorithms.js
+    │   ├── app.js
+    │   ├── fileImport.js
+    │   ├── state.js
+    │   └── utils.js
+    └── pages/
+        ├── classes.html
+        ├── classes.js
+        ├── dashboard.html
+        ├── dashboard.js
+        ├── datesheet.html
+        ├── datesheet.js
+        ├── directory.html
+        ├── directory.js
+        ├── generate.html
+        ├── generate.js
+        ├── import.html
+        ├── import.js
+        ├── rooms.html
+        ├── rooms.js
+        ├── roomview.html
+        ├── roomview.js
+        ├── slips.html
+        └── slips.js
 ```
 
 ---
